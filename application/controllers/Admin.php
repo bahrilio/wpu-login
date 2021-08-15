@@ -8,6 +8,7 @@ class Admin extends CI_Controller
         parent::__construct();
         is_logged_in();
     }
+
     public function index()
     {
         $data['title'] = 'Dashboard';
@@ -53,6 +54,7 @@ class Admin extends CI_Controller
         $this->load->view('admin/role-access', $data);
         $this->load->view('templates/footer');
     }
+
     public function changeAccess()
     {
         $menu_id = $this->input->post('menuId');

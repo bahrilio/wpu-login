@@ -23,7 +23,7 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col"></th>
+                        <th scope="col">Title</th>
                         <th scope="col">Menu</th>
                         <th scope="col">Url</th>
                         <th scope="col">Icon</th>
