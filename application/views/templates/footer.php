@@ -71,6 +71,37 @@
             }
         });
     });
+
+    function showEditRoleModal(id, name) {
+        // console.log(id)
+        // console.log(name)
+
+        $('#edit_role_form #role_id_edit').val(id)
+        $('#edit_role_form #role_name_edit').val(name)
+        $('#editRoleModal').modal('show')
+    }
+
+    function showEditSubMenuModal(id, name) {
+        // console.log(id)
+        // console.log(name)
+        $.ajax({
+            url: "<?= base_url('menu/detail_menu_ajax/'); ?>" + id,
+            type: 'get',
+            data: {},
+            success: function(menu) {
+                console.log()
+                parsedMenu = JSON.parse(menu)
+                $('#edit_submenu_form #title').val(parsedMenu.title)
+                selectMenuId = '#edit_submenu_form #menu'+parsedMenu.menu_id
+                $(selectMenuId).attr('selected', 'true')
+                $('#edit_submenu_form #url').val(parsedMenu.url)
+                $('#edit_submenu_form #submenu_id').val(parsedMenu.id)
+                $('#edit_submenu_form #icon').val(parsedMenu.icon)
+                $('#editSubMenuModal').modal('show')
+            }
+        });
+
+    }
 </script>
 
 </body>

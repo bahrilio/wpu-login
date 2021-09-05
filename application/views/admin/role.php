@@ -11,6 +11,7 @@
             <?= form_error('menu', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
 
             <?= $this->session->flashdata('message'); ?>
+            <?= $this->session->flashdata('flash'); ?>
 
             <a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newRoleModal">Add New Role</a>
 
@@ -29,9 +30,12 @@
                             <th scope="row"><?= $i; ?></th>
                             <td><?= $r['role']; ?></td>
                             <td>
-                                <a href="<?= base_url('admin/roleaccess/') . $r['id']; ?>" class="badge badge-warning">access</a>
-                                <a href="" class="badge badge-success">edit</a>
-                                <a href="" class="badge badge-danger">delete</a>
+                                <a href="<?= base_url('admin/roleaccess/') . $r['id']; ?>" class="btn btn-sm btn-warning">access</a>
+                                <button type="button" onclick="showEditRoleModal('<?= $r['id']; ?>','<?= $r['role']; ?>')" role="button" class="btn btn-sm btn-success">edit</button>
+                                <form class="d-inline" action="<?= base_url('admin/delete_role'); ?>" method="post">
+                                    <input type="hidden" name="role_id" value="<?= $r['id']; ?>">
+                                    <button type='submit' class="btn btn-sm btn-danger" onclick="return confirm('apakah anda yakin untuk menghapus data ini ?')">delete</button>
+                                </form>
                             </td>
                         </tr>
                         <?php $i++; ?>
@@ -50,7 +54,7 @@
 <!-- End of Main Content -->
 
 
-<!-- Modal -->
+<!-- Modal addd new role-->
 <div class="modal fade" id="newRoleModal" tabindex="-1" aria-labelledby="newRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -60,16 +64,43 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="<?= base_url('admin/role'); ?>" method="POST">
+            <form action="<?= base_url('admin/add_role'); ?>" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="role" name="role" placeholder="Role Name">
+                        <input type="text" class="form-control" id="role_name" name="role_name" placeholder="Role Name">
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Adds</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit role-->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRoleModalLabel">Edit Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="edit_role_form" action="<?= base_url('admin/edit_role'); ?>" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" id="role_id_edit" name="role_id_edit" value="">
+                        <input type="text" class="form-control" value="" id="role_name_edit" name="role_name_edit" placeholder="Role Name edit">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>
         </div>

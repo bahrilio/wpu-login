@@ -26,7 +26,7 @@ class Menu extends CI_Controller
             $this->load->view('templates/footer');
         } else {
             $this->db->insert('user_menu', ['menu' => $this->input->post('menu')]);
-            $this->session->set_flashdata('message', '<div class="alert alert-succes" role="alert">New Menu Added!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">New Menu Added!</div>');
             redirect('menu');
         }
     }
@@ -61,8 +61,82 @@ class Menu extends CI_Controller
                 'is_active' => $this->input->post('is_active')
             ];
             $this->db->insert('user_sub_menu', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-succes" role="alert">New Sub Menu Added!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">New Sub Menu Added!</div>');
             redirect('menu/submenu');
         }
+    }
+
+    public function edit_menu()
+    {
+        $menu_id = $this->input->post('menu_id_edit');
+        $menu_name = trim($this->input->post('menu_name_edit'));
+        if (!$menu_name) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-danger" role="alert">Menu name tidak boleh kosong!!!</div>');
+        } else {
+            $data = [
+                'menu' => $menu_name
+            ];
+
+            if ($this->Menu_model->edit_menu($data, $menu_id)) {
+                $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Edit success!!!</div>');
+            } else {
+                $this->session->set_flashdata('flash', '<div class="alert alert-warning" role="alert">No data changed!!!</div>');
+            }
+        }
+        redirect('menu');
+    }
+
+    public function delete_menu()
+    {
+        $menu_id = $this->input->post('menu_id');
+        if ($this->Menu_model->delete_menu($menu_id)) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Delete menu success!!!</div>');
+        } else {
+            $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Delete menu failed!!!</div>');
+        }
+        redirect('menu');
+    }
+
+    public function delete_submenu()
+    {
+        $submenu_id = $this->input->post('submenu_id');
+        if ($this->Menu_model->delete_submenu($submenu_id)) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Delete submenu success!!!</div>');
+        } else {
+            $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Delete submenu failed!!!</div>');
+        }
+        redirect('menu/submenu');
+    }
+
+    public function edit_submenu()
+    {
+        $submenu_id = $this->input->post('submenu_id');
+        $title = trim($this->input->post('title'));
+        if (!$title) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-danger" role="alert">SubMenu name tidak boleh kosong!!!</div>');
+        } else {
+            $data = [
+                'title' => $this->input->post('title'),
+                'menu_id' => $this->input->post('menu_id'),
+                'url' => $this->input->post('url'),
+                'icon' => $this->input->post('icon'),
+                'is_active' => $this->input->post('is_active')
+            ];
+
+            if ($this->Menu_model->edit_submenu($data, $submenu_id)) {
+                $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Edit submenu success!!!</div>');
+            } else {
+                $this->session->set_flashdata('flash', '<div class="alert alert-warning" role="alert">No data changed!!!</div>');
+            }
+        }
+        redirect('menu/submenu');
+    }
+
+    public function detail_menu_ajax($id)
+    {
+
+        $submenu = $this->Menu_model->getSubMenuById($id);
+
+        echo json_encode($submenu);
     }
 }

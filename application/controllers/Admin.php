@@ -74,4 +74,56 @@ class Admin extends CI_Controller
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Access changed!!!</div>');
     }
+
+    public function add_role()
+    {
+        //trim = menghilangkan spasi depan dan belakang string
+
+        $role_name = trim($this->input->post('role_name'));
+        if (!$role_name) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-danger" role="alert">Role name tidak boleh kosong!!!</div>');
+        } else {
+            $data = [
+                'role' => $role_name
+            ];
+
+            if ($this->Role_model->add_role($data)) {
+                $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Add succes!!!</div>');
+            } else {
+                $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Add failed!!!</div>');
+            }
+        }
+        redirect('admin/role');
+    }
+
+    public function delete_role()
+    {
+        $role_id = $this->input->post('role_id');
+        if ($this->Role_model->delete_role($role_id)) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Delete succes!!!</div>');
+        } else {
+            $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Delete failed!!!</div>');
+        }
+        redirect('admin/role');
+    }
+
+    public function edit_role()
+    {
+        $role_id = $this->input->post('role_id_edit');
+        $role_name = trim($this->input->post('role_name_edit'));
+        if (!$role_name) {
+            $this->session->set_flashdata('flash', '<div class="alert alert-danger" role="alert">Role name tidak boleh kosong!!!</div>');
+        } else {
+            $data = [
+                'role' => $role_name
+            ];
+
+            if ($this->Role_model->edit_role($data, $role_id)) {
+                $this->session->set_flashdata('flash', '<div class="alert alert-success" role="alert">Edit succes!!!</div>');
+            } else {
+                $this->session->set_flashdata('flash', '<div class="alert alert-warning" role="alert">No data changed!!!</div>');
+            }
+        }
+        redirect('admin/role');
+    }
 }
